@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+^<!DOCTYPE html>
 <html lang="te">
 <head>
 <meta charset="UTF-8">
@@ -554,7 +554,34 @@ alert("Logout failed: " + e.message);
 }
 });
 
-onAuthStateChanged(auth, async authenticatedUser => {
+
+onAuthStateChanged(auth, async (authenticatedUser) => {
+  user = authenticatedUser;
+
+  if (!user) {
+    profile = null;
+    confirmation = null;
+    showOnly("login");
+    return;
+  }
+
+  showOnly("setup");
+  message("profileMsg", "Loading your profile...");
+  message("loginMsg", "Login successful!");
+
+  try {
+    await loadProfile();
+    message("loginMsg", "");
+  } catch (e) {
+    console.error("Profile loading error:", e);
+    showOnly("setup");
+    message(
+      "profileMsg",
+      "Profile error: " + (e.code || "") + " " + e.message
+    );
+  }
+});
+(auth, async authenticatedUser => {
 user = authenticatedUser;
 
 if (!user) {
