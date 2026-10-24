@@ -486,6 +486,69 @@ $("verify").onclick=async()=>{
 
 $("search").addEventListener("input",renderPeople);
 </script>
+
+<section id="create-profile" style="max-width:400px;margin:20px auto;padding:20px;background:#f0f7ff;border-radius:16px;font-family:Arial;">
+  <h2 style="color:#1769aa;text-align:center;">Create Your Profile</h2>
+
+  <label>Your Name</label>
+  <input id="profileName" type="text" placeholder="Enter your name"
+    style="width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;">
+
+  <label>About Me</label>
+  <textarea id="profileAbout" placeholder="Tell something about yourself"
+    style="width:100%;padding:12px;margin:8px 0 16px;box-sizing:border-box;"></textarea>
+
+  <button onclick="saveProfile()"
+    style="width:100%;padding:13px;background:#1769aa;color:white;border:0;border-radius:8px;">
+    Save Profile
+  </button>
+
+  <p id="profileMessage"></p>
+</section>
+
+<script type="module">
+  import { initializeApp, getApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, doc, setDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // Use the same Firebase project configuration as your OTP page.
+  const app = getApp();
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  window.saveProfile = async function () {
+    const user = auth.currentUser;
+    const name = document.getElementById("profileName").value.trim();
+    const about = document.getElementById("profileAbout").value.trim();
+    const message = document.getElementById("profileMessage");
+
+    if (!user) {
+      message.textContent = "ముందుగా Phone OTPతో Login అవ్వండి.";
+      return;
+    }
+
+    if (!name) {
+      message.textContent = "దయచేసి మీ పేరు నమోదు చేయండి.";
+      return;
+    }
+
+    try {
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        about: about,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+
+      message.textContent = "Profile విజయవంతంగా Save అయింది!";
+    } catch (error) {
+      console.error(error);
+      message.textContent = "Save కాలేదు. Firebase Firestore Rules చెక్ చేయండి.";
+    }
+  };
+</script>
 </body>
 </html>
 
