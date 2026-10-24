@@ -1,14 +1,15 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TO MEET - Phone Login</title>
+  <title>TO MEET</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #eaf2ff;
-      padding: 24px;
+      padding: 20px;
       text-align: center;
     }
     .card {
@@ -20,9 +21,9 @@
     }
     input, button {
       width: 100%;
+      box-sizing: border-box;
       padding: 13px;
       margin: 8px 0;
-      box-sizing: border-box;
       font-size: 16px;
     }
     button {
@@ -31,19 +32,24 @@
       border: 0;
       border-radius: 8px;
     }
-    #recaptcha-container { margin: 16px 0; }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="login">
     <h2>TO MEET</h2>
     <p>Login with your phone number</p>
     <input id="phone" type="tel" placeholder="+91XXXXXXXXXX">
     <div id="recaptcha-container"></div>
-    <button id="send" type="button">Send OTP</button>
-    <input id="otp" type="text" inputmode="numeric" placeholder="Enter OTP">
-    <button id="verify" type="button">Verify OTP</button>
+    <button id="send">Send OTP</button>
+    <input id="otp" inputmode="numeric" placeholder="Enter OTP">
+    <button id="verify">Verify OTP</button>
     <p id="message"></p>
+  </div>
+
+  <div class="card" id="home" hidden>
+    <h2>Welcome to TO MEET!</h2>
+    <p>Login successful.</p>
+    <p>Your Home Page is ready.</p>
   </div>
 
   <script type="module">
@@ -67,7 +73,7 @@
     const auth = getAuth(app);
     const message = document.getElementById("message");
     let confirmation = null;
-    let verifier = null;
+    let verifier;
 
     try {
       verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
@@ -75,13 +81,13 @@
       });
       await verifier.render();
     } catch (e) {
-      message.textContent = "reCAPTCHA setup failed: " + e.message;
+      message.textContent = "reCAPTCHA error: " + e.message;
     }
 
     document.getElementById("send").onclick = async () => {
       const phone = document.getElementById("phone").value.trim();
       if (!phone.startsWith("+")) {
-        message.textContent = "Include country code, e.g. +91XXXXXXXXXX";
+        message.textContent = "Enter country code, e.g. +91...";
         return;
       }
       try {
@@ -89,7 +95,7 @@
         confirmation = await signInWithPhoneNumber(auth, phone, verifier);
         message.textContent = "OTP sent. Check your phone.";
       } catch (e) {
-        message.textContent = "Could not send OTP: " + e.message;
+        message.textContent = "OTP error: " + e.code + " - " + e.message;
       }
     };
 
@@ -102,11 +108,13 @@
         await confirmation.confirm(
           document.getElementById("otp").value.trim()
         );
-        message.textContent = "Phone verified! Login successful.";
+        document.getElementById("login").hidden = true;
+        document.getElementById("home").hidden = false;
       } catch (e) {
-        message.textContent = "Verification failed. Check OTP and try again.";
+        message.textContent = "Verification error: " + e.code + " - " + e.message;
       }
     };
   </script>
 </body>
-  </html>
+</html>
+
