@@ -7,23 +7,34 @@
 <title>TO MEET</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#eef4ff;color:#17233b}
-header{background:#1769e0;color:white;padding:18px;text-align:center}
-.card{background:white;padding:18px;border-radius:16px;margin:14px auto;max-width:480px;box-shadow:0 3px 12px #0000000d}
-input,button,textarea{width:100%;padding:12px;margin:7px 0;font-size:16px;border:1px solid #ccd6e5;border-radius:9px}
+body{margin:0;font-family:Arial,sans-serif;background:#f0f4ff;color:#202b43}
+header{background:#1769e0;color:white;text-align:center;padding:16px}
+header h1{margin:5px}
+.card{background:white;padding:17px;border-radius:16px;margin:14px auto;max-width:540px;box-shadow:0 3px 12px #0001}
+input,textarea,select,button{width:100%;padding:12px;margin:6px 0;border:1px solid #ccd6e5;border-radius:9px;font-size:16px}
 button{background:#1769e0;color:white;border:0;cursor:pointer}
-button.secondary{background:#e5edff;color:#174da5}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px;background:white}
-nav button{font-size:14px;padding:11px 4px;margin:0}
-h2{margin-top:5px}
-small,.muted{color:#63718a}
-.page{max-width:500px;margin:auto}
+button.secondary{background:#e7edff;color:#174da5}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:white;padding:8px}
+nav button{font-size:14px;padding:10px 3px}
+.page{max-width:560px;margin:auto;padding:0 5px}
 [hidden]{display:none!important}
+.muted{font-size:14px;color:#66738b}
+.person{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid #e4e9f2}
+.avatar{width:66px;height:66px;min-width:66px;border-radius:50%;object-fit:cover;background:#e5edff}
+.person-info{flex:1;min-width:0}
+.person-info h3{margin:0 0 5px}
+.person-info p{font-size:14px;margin:4px 0;overflow-wrap:anywhere}
+.person button{width:auto;padding:9px}
+.avatars{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.avatar-option{padding:4px;background:#eef2ff;border:3px solid transparent}
+.avatar-option.selected{border-color:#1769e0}
+.avatar-option img{display:block;width:100%;aspect-ratio:1;object-fit:cover;border-radius:50%}
+.status{overflow-wrap:anywhere}
 </style>
 </head>
 <body>
 <header>
-  <h1>🤝 TO MEET</h1>
+  <h1>TO MEET</h1>
   <p>Meet • Connect • Chat</p>
 </header>
 
@@ -35,7 +46,7 @@ small,.muted{color:#63718a}
   <button id="send">Send OTP</button>
   <input id="otp" inputmode="numeric" placeholder="Enter OTP">
   <button id="verify">Verify OTP</button>
-  <p id="message" role="status"></p>
+  <p id="message" class="status" role="status"></p>
 </section>
 
 <section id="app" hidden>
@@ -45,148 +56,438 @@ small,.muted{color:#63718a}
     <button onclick="showPage('chat')">Chat</button>
     <button onclick="showPage('profile')">Profile</button>
     <button onclick="showPage('coins')">Coins</button>
-    <button onclick="logout()">Logout</button>
+    <button onclick="askLogout()">Logout</button>
   </nav>
 
   <main class="page">
-    <section id="discover" class="card">
+    <section id="setup" class="card" hidden>
+      <h2>Create your profile</h2>
+      <input id="setupName" maxlength="40" placeholder="Your display name">
+      <select id="setupGender">
+        <option value="">Select gender</option>
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <p class="muted">Choose an avatar after creating your profile.</p>
+      <button onclick="finishSetup()">Continue</button>
+      <p id="setupMessage" class="status"></p>
+    </section>
+
+    <section id="discover" class="card" hidden>
       <h2>Discover people</h2>
-      <p>Find people and make new connections.</p>
-      <p class="muted">People profiles will appear here when the database is connected.</p>
-      <button onclick="showPage('requests')">My Meet Requests</button>
+      <input id="search" placeholder="🔍 Search profiles by name">
+      <p id="discoverInfo" class="muted"></p>
+      <div id="peopleList"></div>
+      <button class="secondary" onclick="loadPeople()">Refresh profiles</button>
     </section>
 
     <section id="requests" class="card" hidden>
       <h2>Meet Requests</h2>
-      <p>No requests yet.</p>
-      <p class="muted">Real requests require Firebase database setup.</p>
+      <div id="requestList">No requests loaded.</div>
     </section>
 
     <section id="chat" class="card" hidden>
       <h2>Chat</h2>
-      <p>No conversations yet.</p>
-      <p class="muted">Chat is not connected yet.</p>
+      <p>Chat is not connected yet.</p>
       <p>Planned rate: 5 Coins per minute.</p>
-      <p>Coins must be checked securely on the server before charging.</p>
+      <p class="muted">Secure messaging and billing require additional development.</p>
     </section>
 
     <section id="profile" class="card" hidden>
       <h2>My Profile</h2>
-      <label for="displayName">Your name</label>
-      <input id="displayName" placeholder="Enter your name">
+      <div style="text-align:center">
+        <img id="myAvatar" class="avatar" alt="My avatar"
+             style="width:100px;height:100px">
+        <p id="myPhone" class="muted"></p>
+      </div>
+
+      <label for="displayName">Name</label>
+      <input id="displayName" maxlength="40" placeholder="Your name">
+
       <label for="about">About me</label>
-      <textarea id="about" placeholder="Write something about yourself"></textarea>
-      <button onclick="saveProfile()">Save profile on this page</button>
-      <p id="profileMessage" class="muted"></p>
-      <p class="muted">This demo does not save your profile to the database.</p>
+      <textarea id="about" maxlength="250" rows="3"
+                placeholder="Write a short introduction"></textarea>
+
+      <label for="gender">Gender</label>
+      <select id="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+
+      <h3>Choose your avatar</h3>
+      <p class="muted">Portraits are loaded from an external image service.</p>
+      <div id="avatarChoices" class="avatars"></div>
+
+      <button onclick="saveProfile()">Save Profile</button>
+      <p id="profileMessage" class="status"></p>
     </section>
 
     <section id="coins" class="card" hidden>
-      <h2>🪙 My Coins</h2>
-      <p>Balance: <strong>Demo only</strong></p>
-      <p class="muted">Real balance and payments are not connected yet.</p>
-      <p>Payment verification must happen securely before coins are credited.</p>
+      <h2>My Coins</h2>
+      <p>Balance: Not connected</p>
+      <p class="muted">Real payments and coin balances are not enabled.</p>
     </section>
   </main>
 </section>
 
 <script type="module">
-import { initializeApp }
+import {initializeApp}
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut,
-  onAuthStateChanged
+ getAuth,RecaptchaVerifier,signInWithPhoneNumber,signOut,
+ onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+ getFirestore,doc,getDoc,setDoc,collection,getDocs,
+ addDoc,query,where,serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
-  authDomain: "to-meet-e11eb.firebaseapp.com",
-  projectId: "to-meet-e11eb",
-  storageBucket: "to-meet-e11eb.firebasestorage.app",
-  messagingSenderId: "103784656631",
-  appId: "1:103784656631:web:15670401770f8ac5536df2"
+const firebaseConfig={
+ apiKey:"AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
+ authDomain:"to-meet-e11eb.firebaseapp.com",
+ projectId:"to-meet-e11eb",
+ storageBucket:"to-meet-e11eb.firebasestorage.app",
+ messagingSenderId:"103784656631",
+ appId:"1:103784656631:web:15670401770f8ac5536df2"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const message = document.getElementById("message");
-let confirmation = null;
-let verifier = null;
+const firebaseApp=initializeApp(firebaseConfig);
+const auth=getAuth(firebaseApp);
+const db=getFirestore(firebaseApp);
+const $=id=>document.getElementById(id);
 
-window.showPage = function(id) {
-  ["discover","requests","chat","profile","coins"].forEach(page => {
-    document.getElementById(page).hidden = page !== id;
-  });
-};
+let confirmation=null;
+let verifier=null;
+let currentUser=null;
+let myProfile=null;
+let people=[];
+let profileReady=false;
+let selectedAvatar="";
 
-window.saveProfile = function() {
-  document.getElementById("profileMessage").textContent =
-    "Details shown on this page only. Database saving is not connected yet.";
-};
-
-window.logout = async function() {
-  try {
-    await signOut(auth);
-    confirmation = null;
-    document.getElementById("app").hidden = true;
-    document.getElementById("login").hidden = false;
-    message.textContent = "You have logged out.";
-  } catch (e) {
-    message.textContent = "Logout error: " + e.message;
-  }
-};
-
-onAuthStateChanged(auth, user => {
-  document.getElementById("login").hidden = !!user;
-  document.getElementById("app").hidden = !user;
-  if (user) showPage("discover");
-});
-
-try {
-  verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-    size: "normal"
-  });
-  await verifier.render();
-} catch (e) {
-  message.textContent = "reCAPTCHA error: " + e.message;
+function photoUrl(gender,index){
+ const group=gender==="Male"?"men":"women";
+ return `https://randomuser.me/api/portraits/${group}/${index}.jpg`;
 }
 
-document.getElementById("send").onclick = async () => {
-  const phone = document.getElementById("phone").value.trim();
-  if (!phone.startsWith("+")) {
-    message.textContent = "Enter country code, e.g. +91...";
-    return;
-  }
-  if (!verifier) {
-    message.textContent = "reCAPTCHA is not ready. Refresh and try later.";
-    return;
-  }
-  try {
-    message.textContent = "Sending OTP...";
-    confirmation = await signInWithPhoneNumber(auth, phone, verifier);
-    message.textContent = "OTP sent. Check your phone.";
-  } catch (e) {
-    message.textContent = "OTP error: " + e.code + " - " + e.message;
-  }
+function avatarOptions(gender){
+ return Array.from({length:20},(_,i)=>photoUrl(gender,i));
+}
+
+function showMessage(id,text){
+ $(id).textContent=text;
+}
+
+function setAvatarImage(img,url){
+ img.src=url||"";
+ img.onerror=()=>{img.onerror=null;img.alt="Avatar unavailable";};
+}
+
+window.showPage=function(id){
+ if(!profileReady){
+  $("setup").hidden=false;
+  return;
+ }
+ ["discover","requests","chat","profile","coins"].forEach(p=>{
+  $(p).hidden=p!==id;
+ });
+ if(id==="discover")loadPeople();
+ if(id==="requests")loadRequests();
+ if(id==="profile")renderAvatarChoices();
 };
 
-document.getElementById("verify").onclick = async () => {
-  if (!confirmation) {
-    message.textContent = "Tap Send OTP first.";
-    return;
+function renderAvatarChoices(){
+ const box=$("avatarChoices");
+ box.replaceChildren();
+ const gender=$("gender").value||myProfile?.gender||"Male";
+
+ avatarOptions(gender).forEach((url,i)=>{
+  const btn=document.createElement("button");
+  btn.type="button";
+  btn.className="avatar-option"+(url===selectedAvatar?" selected":"");
+  btn.setAttribute("aria-label","Choose avatar "+(i+1));
+
+  const img=document.createElement("img");
+  img.src=url;
+  img.alt="Portrait "+(i+1);
+  img.loading="lazy";
+  img.onerror=()=>{img.style.opacity=".25";};
+
+  btn.appendChild(img);
+  btn.onclick=()=>{
+   selectedAvatar=url;
+   setAvatarImage($("myAvatar"),url);
+   renderAvatarChoices();
+  };
+  box.appendChild(btn);
+ });
+}
+
+$("gender").addEventListener("change",()=>{
+ const urls=avatarOptions($("gender").value);
+ if(!urls.includes(selectedAvatar))selectedAvatar=urls[0];
+ setAvatarImage($("myAvatar"),selectedAvatar);
+ renderAvatarChoices();
+});
+
+async function loadMyProfile(){
+ if(!currentUser)return;
+ try{
+  const snap=await getDoc(doc(db,"users",currentUser.uid));
+  myProfile=snap.exists()?snap.data():null;
+  profileReady=!!(myProfile?.name&&myProfile?.gender);
+
+  if(!myProfile){
+   myProfile={name:"",about:"",gender:"",avatar:""};
   }
-  try {
-    await confirmation.confirm(
-      document.getElementById("otp").value.trim()
-    );
-    message.textContent = "Login successful!";
-  } catch (e) {
-    message.textContent =
-      "Verification error: " + e.code + " - " + e.message;
-  }
+
+  $("setup").hidden=profileReady;
+  $("myPhone").textContent=currentUser.phoneNumber||"";
+  $("setupName").value=myProfile.name||"";
+  $("setupGender").value=myProfile.gender||"";
+
+  $("displayName").value=myProfile.name||"";
+  $("about").value=myProfile.about||"";
+  $("gender").value=myProfile.gender||"Male";
+
+  selectedAvatar=myProfile.avatar||
+    avatarOptions(myProfile.gender||"Male")[0];
+  setAvatarImage($("myAvatar"),selectedAvatar);
+  renderAvatarChoices();
+
+  if(profileReady)await loadPeople();
+ }catch(e){
+  showMessage("message","Profile loading error: "+e.message);
+ }
+}
+
+window.finishSetup=async function(){
+ const name=$("setupName").value.trim();
+ const gender=$("setupGender").value;
+ if(!name||!gender){
+  showMessage("setupMessage","Enter your name and choose gender.");
+  return;
+ }
+ selectedAvatar=avatarOptions(gender)[0];
+ myProfile={name,gender,about:"",avatar:selectedAvatar};
+ await saveToFirestore(true);
 };
+
+window.saveProfile=async function(){
+ const name=$("displayName").value.trim();
+ const gender=$("gender").value;
+ if(!name||!gender){
+  showMessage("profileMessage","Enter your name and gender.");
+  return;
+ }
+ myProfile={
+  ...myProfile,
+  name,
+  gender,
+  about:$("about").value.trim(),
+  avatar:selectedAvatar||avatarOptions(gender)[0]
+ };
+ await saveToFirestore(false);
+};
+
+async function saveToFirestore(firstSetup){
+ try{
+  await setDoc(doc(db,"users",currentUser.uid),{
+   name:myProfile.name,
+   gender:myProfile.gender,
+   about:myProfile.about||"",
+   avatar:myProfile.avatar||"",
+   updatedAt:serverTimestamp()
+  },{merge:true});
+
+  profileReady=true;
+  $("setup").hidden=true;
+  setAvatarImage($("myAvatar"),myProfile.avatar);
+  renderAvatarChoices();
+
+  showMessage(firstSetup?"setupMessage":"profileMessage","Profile saved.");
+  if(firstSetup)window.showPage("discover");
+  await loadPeople();
+ }catch(e){
+  showMessage(firstSetup?"setupMessage":"profileMessage",
+   "Save failed: "+e.message);
+ }
+}
+
+window.loadPeople=async function(){
+ if(!currentUser||!profileReady)return;
+ showMessage("discoverInfo","Loading profiles...");
+ try{
+  const snap=await getDocs(collection(db,"users"));
+  people=snap.docs
+   .filter(d=>d.id!==currentUser.uid)
+   .map(d=>({uid:d.id,...d.data()}))
+   .filter(p=>p.name&&p.gender&&p.gender!==myProfile.gender);
+  renderPeople();
+ }catch(e){
+  showMessage("discoverInfo","Could not load profiles: "+e.message);
+ }
+};
+
+window.renderPeople=function(){
+ const box=$("peopleList");
+ box.replaceChildren();
+ const term=$("search").value.trim().toLowerCase();
+ const found=people.filter(p=>
+  String(p.name||"").toLowerCase().includes(term)
+ );
+ showMessage("discoverInfo",found.length?
+  found.length+" profile(s) found":
+  "No matching profiles. Other users must create profiles first.");
+
+ found.forEach(p=>{
+  const row=document.createElement("div");
+  row.className="person";
+
+  const img=document.createElement("img");
+  img.className="avatar";
+  img.alt="Profile avatar";
+  img.loading="lazy";
+  setAvatarImage(img,p.avatar);
+
+  const info=document.createElement("div");
+  info.className="person-info";
+  const name=document.createElement("h3");
+  name.textContent=p.name;
+  const about=document.createElement("p");
+  about.textContent=p.about||"No introduction yet.";
+  const gender=document.createElement("p");
+  gender.className="muted";
+  gender.textContent=p.gender;
+  info.append(name,about,gender);
+
+  const btn=document.createElement("button");
+  btn.textContent="Meet";
+  btn.onclick=()=>sendRequest(p);
+
+  row.append(img,info,btn);
+  box.appendChild(row);
+ });
+};
+
+async function sendRequest(person){
+ try{
+  const existing=await getDocs(query(
+   collection(db,"requests"),
+   where("fromUid","==",currentUser.uid),
+   where("toUid","==",person.uid),
+   where("status","==","pending")
+  ));
+  if(!existing.empty){
+   alert("A pending request already exists.");
+   return;
+  }
+  await addDoc(collection(db,"requests"),{
+   fromUid:currentUser.uid,
+   toUid:person.uid,
+   fromName:myProfile.name,
+   toName:person.name,
+   status:"pending",
+   createdAt:serverTimestamp()
+  });
+  alert("Meet request sent.");
+ }catch(e){
+  alert("Request failed: "+e.message);
+ }
+}
+
+window.loadRequests=async function(){
+ const box=$("requestList");
+ box.replaceChildren();
+ try{
+  const snap=await getDocs(query(
+   collection(db,"requests"),
+   where("toUid","==",currentUser.uid)
+  ));
+  if(snap.empty){
+   box.textContent="No meet requests yet.";
+   return;
+  }
+  snap.forEach(d=>{
+   const r=d.data();
+   const p=document.createElement("p");
+   p.textContent=(r.fromName||"User")+" — "+(r.status||"pending");
+   box.appendChild(p);
+  });
+ }catch(e){
+  box.textContent="Could not load requests: "+e.message;
+ }
+};
+
+window.askLogout=async function(){
+ if(confirm("Are you sure you want to log out?")){
+  try{
+   await signOut(auth);
+  }catch(e){
+   showMessage("message","Logout failed: "+e.message);
+  }
+ }
+};
+
+onAuthStateChanged(auth,async user=>{
+ currentUser=user;
+ $("login").hidden=!!user;
+ $("app").hidden=!user;
+ if(user)await loadMyProfile();
+ else{
+  profileReady=false;
+  myProfile=null;
+  people=[];
+ }
+});
+
+try{
+ verifier=new RecaptchaVerifier(auth,"recaptcha-container",{size:"normal"});
+ await verifier.render();
+}catch(e){
+ showMessage("message","reCAPTCHA error: "+e.message);
+}
+
+$("send").onclick=async()=>{
+ const phone=$("phone").value.trim();
+ if(!phone.startsWith("+")){
+  showMessage("message","Enter phone number with country code, e.g. +91...");
+  return;
+ }
+ if(!verifier){
+  showMessage("message","Refresh the page and try again.");
+  return;
+ }
+ try{
+  showMessage("message","Sending OTP...");
+  confirmation=await signInWithPhoneNumber(auth,phone,verifier);
+  showMessage("message","OTP sent. Check your phone.");
+ }catch(e){
+  showMessage("message","OTP error: "+e.code+" - "+e.message);
+ }
+};
+
+$("verify").onclick=async()=>{
+ if(!confirmation){
+  showMessage("message","Tap Send OTP first.");
+  return;
+ }
+ const code=$("otp").value.trim();
+ if(!code){
+  showMessage("message","Enter OTP.");
+  return;
+ }
+ try{
+  await confirmation.confirm(code);
+  showMessage("message","Login successful!");
+ }catch(e){
+  showMessage("message","Verification error: "+e.code+" - "+e.message);
+ }
+};
+
+$("search").addEventListener("input",renderPeople);
 </script>
 </body>
 </html>
+
 
 
