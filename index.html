@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="te">
 <head>
@@ -10,26 +9,20 @@
 body{margin:0;font-family:Arial,sans-serif;background:#eef3ff;color:#172747}
 header{background:#1769e0;color:white;text-align:center;padding:18px}
 header h1{margin:0;font-size:28px}
-header p{margin:7px 0 0}
-.card{background:white;padding:18px;border-radius:16px;
-margin:16px auto;max-width:560px;box-shadow:0 4px 14px #152b5012}
-input,textarea,select,button{width:100%;padding:12px;margin:7px 0;
-border:1px solid #ccd6e5;border-radius:9px;font-size:16px}
+.card{background:white;padding:18px;border-radius:16px;margin:16px auto;max-width:560px;box-shadow:0 4px 14px #152b5012}
+input,textarea,select,button{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd6e5;border-radius:9px;font-size:16px}
 button{background:#1769e0;color:white;border:0;font-weight:bold}
 button.secondary{background:#e8efff;color:#174da5}
 button:disabled{opacity:.5}
-nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;
-background:white;padding:8px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:white;padding:8px}
 nav button{font-size:13px;padding:11px 3px}
 [hidden]{display:none!important}
 .muted{font-size:13px;color:#66738b}
 .status{overflow-wrap:anywhere}
 .languages{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.lang{display:flex;align-items:center;gap:8px;padding:10px;
-border:1px solid #d7e0ef;border-radius:9px}
+.lang{display:flex;align-items:center;gap:8px;padding:10px;border:1px solid #d7e0ef;border-radius:9px}
 .lang input{width:18px;height:18px;margin:0}
-.person{display:flex;gap:10px;align-items:center;
-padding:12px 0;border-bottom:1px solid #e5eaf2}
+.person{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid #e5eaf2}
 .person div{flex:1;overflow-wrap:anywhere}
 .person button{width:auto;padding:10px}
 </style>
@@ -37,129 +30,127 @@ padding:12px 0;border-bottom:1px solid #e5eaf2}
 <body>
 
 <header>
-  <h1>💙 TO MEET</h1>
-  <p>Meet • Connect • Chat</p>
+<h1>💙 TO MEET</h1>
+<p>Meet • Connect • Chat</p>
 </header>
 
 <section id="login" class="card">
-  <h2>Welcome!</h2>
-  <p>Login with your phone number</p>
-  <input id="phone" type="tel" placeholder="+91XXXXXXXXXX">
-  <div id="recaptcha-container"></div>
-  <button id="send">Send OTP</button>
-  <input id="otp" inputmode="numeric" placeholder="Enter OTP">
-  <button id="verify">Verify OTP</button>
-  <p id="loginMsg" class="status"></p>
+<h2>Welcome!</h2>
+<p>Login with your phone number</p>
+<input id="phone" type="tel" autocomplete="tel" placeholder="+91XXXXXXXXXX">
+<div id="recaptcha-container"></div>
+<button id="send">Send OTP</button>
+<input id="otp" inputmode="numeric" autocomplete="one-time-code" placeholder="Enter OTP">
+<button id="verify">Verify OTP</button>
+<p id="loginMsg" class="status"></p>
 </section>
 
 <section id="setup" class="card" hidden>
-  <h2>Create Your Profile</h2>
-  <label for="name">Your name</label>
-  <input id="name" maxlength="40" placeholder="Enter your name">
-  <label for="gender">Gender</label>
-  <select id="gender">
-    <option value="">Select gender</option>
-    <option>Male</option>
-    <option>Female</option>
-    <option>Other</option>
-    <option>Prefer not to say</option>
-  </select>
-  <label for="about">About me</label>
-  <textarea id="about" maxlength="250"
-    placeholder="Tell people something about yourself"></textarea>
-  <button id="saveProfile">Save Profile & Continue</button>
-  <p id="profileMsg" class="status"></p>
+<h2>Create Your Profile</h2>
+<label for="name">Your name</label>
+<input id="name" maxlength="40" placeholder="Enter your name">
+<label for="gender">Gender</label>
+<select id="gender">
+<option value="">Select gender</option>
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+<option>Prefer not to say</option>
+</select>
+<label for="about">About me</label>
+<textarea id="about" maxlength="250" placeholder="Tell people something about yourself"></textarea>
+<button id="saveProfile">Save Profile & Continue</button>
+<p id="profileMsg" class="status"></p>
 </section>
 
 <section id="languagePage" class="card" hidden>
-  <h2>🌐 Choose Your Languages</h2>
-  <p>Select up to 10 languages you understand or speak.</p>
-  <p id="languageCount" class="muted">0 of 10 selected</p>
-  <div id="languageList" class="languages"></div>
-  <button id="saveLanguages">Save Languages & Continue</button>
-  <p id="languageMsg" class="status"></p>
+<h2>🌐 Choose Your Languages</h2>
+<p>Select up to 10 languages you understand or speak.</p>
+<p id="languageCount" class="muted">0 of 10 selected</p>
+<div id="languageList" class="languages"></div>
+<button id="saveLanguages">Save Languages & Continue</button>
+<p id="languageMsg" class="status"></p>
 </section>
 
 <section id="mainApp" hidden>
-  <nav>
-    <button data-page="discover">Discover</button>
-    <button data-page="requests">Requests</button>
-    <button data-page="profilePage">My Profile</button>
-    <button data-page="languagesEdit">Languages</button>
-    <button data-page="chatPage">Chat</button>
-    <button id="logout">Logout</button>
-  </nav>
+<nav>
+<button data-page="discover">Discover</button>
+<button data-page="requests">Requests</button>
+<button data-page="profilePage">My Profile</button>
+<button data-page="languagesEdit">Languages</button>
+<button data-page="chatPage">Chat</button>
+<button id="logout">Logout</button>
+</nav>
 
-  <main>
-    <section id="discover" class="card">
-      <h2>Discover People</h2>
-      <input id="search" placeholder="Search by name">
-      <div id="peopleList"></div>
-      <button class="secondary" id="refresh">Refresh Profiles</button>
-      <p id="discoverMsg" class="status"></p>
-    </section>
+<main>
+<section id="discover" class="card">
+<h2>Discover People</h2>
+<input id="search" placeholder="Search by name">
+<div id="peopleList"></div>
+<button class="secondary" id="refresh">Refresh Profiles</button>
+<p id="discoverMsg" class="status"></p>
+</section>
 
-    <section id="requests" class="card" hidden>
-      <h2>Meet Requests</h2>
-      <div id="requestList"></div>
-      <button class="secondary" id="refreshRequests">Refresh Requests</button>
-    </section>
+<section id="requests" class="card" hidden>
+<h2>Meet Requests</h2>
+<div id="requestList"></div>
+<button class="secondary" id="refreshRequests">Refresh Requests</button>
+</section>
 
-    <section id="profilePage" class="card" hidden>
-      <h2>My Profile</h2>
-      <p id="myPhone" class="muted"></p>
-      <label for="editName">Name</label>
-      <input id="editName" maxlength="40">
-      <label for="editGender">Gender</label>
-      <select id="editGender">
-        <option>Male</option>
-        <option>Female</option>
-        <option>Other</option>
-        <option>Prefer not to say</option>
-      </select>
-      <label for="editAbout">About me</label>
-      <textarea id="editAbout" maxlength="250"></textarea>
-      <button id="updateProfile">Update Profile</button>
-      <p id="editMsg" class="status"></p>
-    </section>
+<section id="profilePage" class="card" hidden>
+<h2>My Profile</h2>
+<p id="myPhone" class="muted"></p>
+<label for="editName">Name</label>
+<input id="editName" maxlength="40">
+<label for="editGender">Gender</label>
+<select id="editGender">
+<option>Male</option>
+<option>Female</option>
+<option>Other</option>
+<option>Prefer not to say</option>
+</select>
+<label for="editAbout">About me</label>
+<textarea id="editAbout" maxlength="250"></textarea>
+<button id="updateProfile">Update Profile</button>
+<p id="editMsg" class="status"></p>
+</section>
 
-    <section id="languagesEdit" class="card" hidden>
-      <h2>My Languages</h2>
-      <div id="editLanguageList" class="languages"></div>
-      <button id="updateLanguages">Update Languages</button>
-      <p id="editLanguageMsg" class="status"></p>
-    </section>
+<section id="languagesEdit" class="card" hidden>
+<h2>My Languages</h2>
+<p id="editLanguageCount" class="muted"></p>
+<div id="editLanguageList" class="languages"></div>
+<button id="updateLanguages">Update Languages</button>
+<p id="editLanguageMsg" class="status"></p>
+</section>
 
-    <section id="chatPage" class="card" hidden>
-      <h2>Chat</h2>
-      <p>Chat feature is not connected yet.</p>
-      <p class="muted">Real-time messaging, blocking, reporting and
-      privacy controls must be implemented before launch.</p>
-    </section>
-  </main>
+<section id="chatPage" class="card" hidden>
+<h2>Chat</h2>
+<p>Chat feature is not connected yet.</p>
+<p class="muted">Messaging, blocking, reporting and privacy controls must be implemented before launch.</p>
+</section>
+</main>
 </section>
 
 <script type="module">
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-  getAuth, RecaptchaVerifier, signInWithPhoneNumber,
-  signOut, onAuthStateChanged
+getAuth, RecaptchaVerifier, signInWithPhoneNumber,
+signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-  getFirestore, doc, getDoc, setDoc, collection,
-  getDocs, addDoc, query, where, serverTimestamp
+getFirestore, doc, getDoc, setDoc, collection,
+getDocs, addDoc, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
-  authDomain: "to-meet-e11eb.firebaseapp.com",
-  projectId: "to-meet-e11eb",
-  storageBucket: "to-meet-e11eb.firebasestorage.app",
-  messagingSenderId: "103784656631",
-  appId: "1:103784656631:web:15670401770f8ac5536df2"
+apiKey: "AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
+authDomain: "to-meet-e11eb.firebaseapp.com",
+projectId: "to-meet-e11eb",
+storageBucket: "to-meet-e11eb.firebasestorage.app",
+messagingSenderId: "103784656631",
+appId: "1:103784656631:web:15670401770f8ac5536df2"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -168,10 +159,10 @@ const db = getFirestore(app);
 const $ = id => document.getElementById(id);
 
 const languages = [
-  "Assamese","Bengali","Bodo","Dogri","English","Gujarati",
-  "Hindi","Kannada","Kashmiri","Konkani","Maithili","Malayalam",
-  "Manipuri","Marathi","Nepali","Odia","Punjabi","Sanskrit",
-  "Santali","Sindhi","Tamil","Telugu","Urdu"
+"Assamese","Bengali","Bodo","Dogri","English","Gujarati",
+"Hindi","Kannada","Kashmiri","Konkani","Maithili","Malayalam",
+"Manipuri","Marathi","Nepali","Odia","Punjabi","Sanskrit",
+"Santali","Sindhi","Tamil","Telugu","Urdu"
 ];
 
 let confirmation = null;
@@ -179,411 +170,483 @@ let verifier = null;
 let user = null;
 let profile = null;
 let chosenLanguages = [];
-let activePage = "discover";
 
 function message(id, text) {
-  $(id).textContent = text;
+$(id).textContent = text;
 }
 
 function showOnly(id) {
-  ["login","setup","languagePage","mainApp"].forEach(section => {
-    $(section).hidden = section !== id;
-  });
+["login","setup","languagePage","mainApp"].forEach(section => {
+$(section).hidden = section !== id;
+});
 }
 
 function showMainPage(id) {
-  if (!profile) return;
-  activePage = id;
-  ["discover","requests","profilePage","languagesEdit","chatPage"]
-    .forEach(page => $(page).hidden = page !== id);
+if (!profile) return;
 
-  if (id === "discover") loadPeople();
-  if (id === "requests") loadRequests();
-  if (id === "profilePage") fillProfile();
-  if (id === "languagesEdit") renderLanguages("editLanguageList");
+["discover","requests","profilePage","languagesEdit","chatPage"]
+.forEach(page => {
+$(page).hidden = page !== id;
+});
+
+if (id === "discover") loadPeople();
+if (id === "requests") loadRequests();
+if (id === "profilePage") fillProfile();
+
+if (id === "languagesEdit") {
+renderLanguages("editLanguageList");
+$("editLanguageCount").textContent =
+chosenLanguages.length + " of 10 selected";
+}
 }
 
 document.querySelectorAll("nav [data-page]").forEach(button => {
-  button.addEventListener("click", () => {
-    showMainPage(button.dataset.page);
-  });
+button.addEventListener("click", () => {
+showMainPage(button.dataset.page);
+});
 });
 
 function renderLanguages(containerId) {
-  const box = $(containerId);
-  box.replaceChildren();
+const box = $(containerId);
+box.replaceChildren();
 
-  languages.forEach(language => {
-    const label = document.createElement("label");
-    label.className = "lang";
+languages.forEach(language => {
+const label = document.createElement("label");
+label.className = "lang";
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.value = language;
-    checkbox.checked = chosenLanguages.includes(language);
+const checkbox = document.createElement("input");
+checkbox.type = "checkbox";
+checkbox.value = language;
+checkbox.checked = chosenLanguages.includes(language);
 
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) {
-        if (chosenLanguages.length >= 10) {
-          checkbox.checked = false;
-          message(
-            containerId === "languageList"
-              ? "languageMsg" : "editLanguageMsg",
-            "You can select up to 10 languages."
-          );
-          return;
-        }
-        chosenLanguages.push(language);
-      } else {
-        chosenLanguages = chosenLanguages.filter(x => x !== language);
-      }
+checkbox.addEventListener("change", () => {
+if (checkbox.checked) {
+if (chosenLanguages.length >= 10) {
+checkbox.checked = false;
+message(
+containerId === "languageList"
+? "languageMsg" : "editLanguageMsg",
+"You can select up to 10 languages."
+);
+return;
+}
+chosenLanguages.push(language);
+} else {
+chosenLanguages = chosenLanguages.filter(x => x !== language);
+}
 
-      updateLanguageCount();
-      message(
-        containerId === "languageList"
-          ? "languageMsg" : "editLanguageMsg",
-        ""
-      );
-    });
+updateLanguageCount();
 
-    const text = document.createElement("span");
-    text.textContent = language;
-    label.append(checkbox, text);
-    box.appendChild(label);
-  });
+if (containerId === "editLanguageList") {
+$("editLanguageCount").textContent =
+chosenLanguages.length + " of 10 selected";
+}
 
-  updateLanguageCount();
+message(
+containerId === "languageList"
+? "languageMsg" : "editLanguageMsg",
+""
+);
+});
+
+const text = document.createElement("span");
+text.textContent = language;
+label.append(checkbox, text);
+box.appendChild(label);
+});
+
+updateLanguageCount();
 }
 
 function updateLanguageCount() {
-  $("languageCount").textContent =
-    chosenLanguages.length + " of 10 selected";
+$("languageCount").textContent =
+chosenLanguages.length + " of 10 selected";
 }
 
 async function loadProfile() {
-  const snap = await getDoc(doc(db, "users", user.uid));
-  profile = snap.exists() ? snap.data() : null;
+const snap = await getDoc(doc(db, "users", user.uid));
+profile = snap.exists() ? snap.data() : null;
 
-  if (!profile || !profile.name || !profile.gender) {
-    profile = null;
-    showOnly("setup");
-    return;
-  }
+if (!profile || !profile.name || !profile.gender) {
+profile = null;
+showOnly("setup");
+return;
+}
 
-  chosenLanguages = Array.isArray(profile.languages)
-    ? profile.languages.filter(x => languages.includes(x)).slice(0, 10)
-    : [];
+chosenLanguages = Array.isArray(profile.languages)
+? profile.languages.filter(x => languages.includes(x)).slice(0, 10)
+: [];
 
-  if (chosenLanguages.length === 0) {
-    renderLanguages("languageList");
-    showOnly("languagePage");
-    return;
-  }
+if (chosenLanguages.length === 0) {
+renderLanguages("languageList");
+showOnly("languagePage");
+return;
+}
 
-  showOnly("mainApp");
-  showMainPage("discover");
+showOnly("mainApp");
+showMainPage("discover");
+}
+
+/* Save private data separately from discoverable profile data. */
+async function saveProfileData(data) {
+const privateData = {
+...data,
+updatedAt: serverTimestamp()
+};
+
+const publicData = {
+name: data.name ?? profile?.name ?? "",
+gender: data.gender ?? profile?.gender ?? "",
+about: data.about ?? profile?.about ?? "",
+languages: data.languages ?? profile?.languages ?? [],
+updatedAt: serverTimestamp()
+};
+
+await setDoc(
+doc(db, "users", user.uid),
+privateData,
+{merge: true}
+);
+
+await setDoc(
+doc(db, "publicProfiles", user.uid),
+publicData,
+{merge: true}
+);
 }
 
 $("saveProfile").addEventListener("click", async () => {
-  const name = $("name").value.trim();
-  const gender = $("gender").value;
-  const about = $("about").value.trim();
+const name = $("name").value.trim();
+const gender = $("gender").value;
+const about = $("about").value.trim();
 
-  if (!name || !gender) {
-    message("profileMsg", "Enter your name and select gender.");
-    return;
-  }
+if (!name || !gender) {
+message("profileMsg", "Enter your name and select gender.");
+return;
+}
 
-  try {
-    $("saveProfile").disabled = true;
+try {
+$("saveProfile").disabled = true;
+message("profileMsg", "Saving profile...");
 
-    await setDoc(doc(db, "users", user.uid), {
-      name, gender, about,
-      phone: user.phoneNumber || "",
-      languages: [],
-      updatedAt: serverTimestamp()
-    }, { merge: true });
+await saveProfileData({
+name,
+gender,
+about,
+phone: user.phoneNumber || "",
+languages: []
+});
 
-    profile = { name, gender, about, languages: [] };
-    chosenLanguages = [];
-    renderLanguages("languageList");
-    showOnly("languagePage");
-  } catch (e) {
-    message("profileMsg", "Save failed: " + e.message);
-  } finally {
-    $("saveProfile").disabled = false;
-  }
+profile = {name, gender, about, languages: []};
+chosenLanguages = [];
+renderLanguages("languageList");
+showOnly("languagePage");
+
+} catch (e) {
+message("profileMsg", "Save failed: " + e.message);
+} finally {
+$("saveProfile").disabled = false;
+}
 });
 
 $("saveLanguages").addEventListener("click", async () => {
-  if (chosenLanguages.length === 0) {
-    message("languageMsg", "Select at least one language.");
-    return;
-  }
+if (chosenLanguages.length === 0) {
+message("languageMsg", "Select at least one language.");
+return;
+}
 
-  try {
-    $("saveLanguages").disabled = true;
-    await setDoc(doc(db, "users", user.uid), {
-      languages: chosenLanguages,
-      updatedAt: serverTimestamp()
-    }, { merge: true });
+try {
+$("saveLanguages").disabled = true;
 
-    profile.languages = [...chosenLanguages];
-    showOnly("mainApp");
-    showMainPage("discover");
-  } catch (e) {
-    message("languageMsg", "Could not save: " + e.message);
-  } finally {
-    $("saveLanguages").disabled = false;
-  }
+await saveProfileData({
+languages: [...chosenLanguages]
+});
+
+profile.languages = [...chosenLanguages];
+showOnly("mainApp");
+showMainPage("discover");
+
+} catch (e) {
+message("languageMsg", "Could not save: " + e.message);
+} finally {
+$("saveLanguages").disabled = false;
+}
 });
 
 function fillProfile() {
-  $("myPhone").textContent = user?.phoneNumber || "";
-  $("editName").value = profile?.name || "";
-  $("editGender").value = profile?.gender || "Male";
-  $("editAbout").value = profile?.about || "";
+$("myPhone").textContent = "Phone: " + (user?.phoneNumber || "");
+$("editName").value = profile?.name || "";
+$("editGender").value = profile?.gender || "Male";
+$("editAbout").value = profile?.about || "";
 }
 
 $("updateProfile").addEventListener("click", async () => {
-  const name = $("editName").value.trim();
-  const gender = $("editGender").value;
-  const about = $("editAbout").value.trim();
+const name = $("editName").value.trim();
+const gender = $("editGender").value;
+const about = $("editAbout").value.trim();
 
-  if (!name || !gender) {
-    message("editMsg", "Name and gender are required.");
-    return;
-  }
+if (!name || !gender) {
+message("editMsg", "Name and gender are required.");
+return;
+}
 
-  try {
-    await setDoc(doc(db, "users", user.uid), {
-      name, gender, about, updatedAt: serverTimestamp()
-    }, { merge: true });
-
-    profile = { ...profile, name, gender, about };
-    message("editMsg", "Profile updated successfully.");
-  } catch (e) {
-    message("editMsg", "Update failed: " + e.message);
-  }
+try {
+await saveProfileData({name, gender, about});
+profile = {...profile, name, gender, about};
+message("editMsg", "Profile updated successfully.");
+} catch (e) {
+message("editMsg", "Update failed: " + e.message);
+}
 });
 
 $("updateLanguages").addEventListener("click", async () => {
-  if (chosenLanguages.length === 0) {
-    message("editLanguageMsg", "Select at least one language.");
-    return;
-  }
+if (chosenLanguages.length === 0) {
+message("editLanguageMsg", "Select at least one language.");
+return;
+}
 
-  try {
-    await setDoc(doc(db, "users", user.uid), {
-      languages: chosenLanguages,
-      updatedAt: serverTimestamp()
-    }, { merge: true });
-
-    profile.languages = [...chosenLanguages];
-    message("editLanguageMsg", "Languages updated.");
-  } catch (e) {
-    message("editLanguageMsg", "Save failed: " + e.message);
-  }
+try {
+await saveProfileData({languages: [...chosenLanguages]});
+profile.languages = [...chosenLanguages];
+message("editLanguageMsg", "Languages updated.");
+} catch (e) {
+message("editLanguageMsg", "Save failed: " + e.message);
+}
 });
 
 async function loadPeople() {
-  if (!user || !profile) return;
-  message("discoverMsg", "Loading profiles...");
+if (!user || !profile) return;
 
-  try {
-    const snap = await getDocs(collection(db, "users"));
-    const people = snap.docs
-      .filter(d => d.id !== user.uid)
-      .map(d => ({ uid: d.id, ...d.data() }))
-      .filter(p => p.name && p.gender);
+message("discoverMsg", "Loading profiles...");
 
-    renderPeople(people);
-  } catch (e) {
-    message("discoverMsg", "Could not load profiles: " + e.message);
-  }
+try {
+const snap = await getDocs(collection(db, "publicProfiles"));
+
+const people = snap.docs
+.filter(d => d.id !== user.uid)
+.map(d => ({uid: d.id, ...d.data()}))
+.filter(p => p.name && p.gender);
+
+renderPeople(people);
+
+} catch (e) {
+message(
+"discoverMsg",
+"Could not load profiles: " + e.message +
+" (Check Firestore Rules.)"
+);
+}
 }
 
 function renderPeople(people) {
-  const box = $("peopleList");
-  box.replaceChildren();
+const box = $("peopleList");
+box.replaceChildren();
 
-  const term = $("search").value.trim().toLowerCase();
-  const found = people.filter(p =>
-    String(p.name).toLowerCase().includes(term)
-  );
+const term = $("search").value.trim().toLowerCase();
+const found = people.filter(p =>
+String(p.name).toLowerCase().includes(term)
+);
 
-  message("discoverMsg", found.length
-    ? found.length + " profile(s) found."
-    : "No profiles found.");
+message(
+"discoverMsg",
+found.length
+? found.length + " profile(s) found."
+: "No profiles found."
+);
 
-  found.forEach(person => {
-    const row = document.createElement("div");
-    row.className = "person";
+found.forEach(person => {
+const row = document.createElement("div");
+row.className = "person";
 
-    const info = document.createElement("div");
-    const name = document.createElement("strong");
-    name.textContent = person.name;
+const info = document.createElement("div");
+const name = document.createElement("strong");
+name.textContent = person.name;
 
-    const about = document.createElement("p");
-    about.textContent = person.about || "No introduction yet.";
+const about = document.createElement("p");
+about.textContent = person.about || "No introduction yet.";
 
-    const langs = document.createElement("p");
-    langs.className = "muted";
-    langs.textContent = Array.isArray(person.languages)
-      ? person.languages.join(", ") : "";
+const langs = document.createElement("p");
+langs.className = "muted";
+langs.textContent = Array.isArray(person.languages)
+? person.languages.join(", ") : "";
 
-    info.append(name, about, langs);
+info.append(name, about, langs);
 
-    const button = document.createElement("button");
-    button.textContent = "Meet";
-    button.addEventListener("click", () => sendRequest(person));
+const button = document.createElement("button");
+button.textContent = "Meet";
+button.addEventListener("click", () => sendRequest(person));
 
-    row.append(info, button);
-    box.appendChild(row);
-  });
+row.append(info, button);
+box.appendChild(row);
+});
 }
 
 $("search").addEventListener("input", loadPeople);
 $("refresh").addEventListener("click", loadPeople);
 
 async function sendRequest(person) {
-  try {
-    const existing = await getDocs(query(
-      collection(db, "requests"),
-      where("fromUid", "==", user.uid),
-      where("toUid", "==", person.uid),
-      where("status", "==", "pending")
-    ));
+try {
+const existing = await getDocs(query(
+collection(db, "requests"),
+where("fromUid", "==", user.uid),
+where("toUid", "==", person.uid),
+where("status", "==", "pending")
+));
 
-    if (!existing.empty) {
-      alert("You already sent a pending request.");
-      return;
-    }
+if (!existing.empty) {
+alert("You already sent a pending request.");
+return;
+}
 
-    await addDoc(collection(db, "requests"), {
-      fromUid: user.uid,
-      toUid: person.uid,
-      fromName: profile.name,
-      toName: person.name,
-      status: "pending",
-      createdAt: serverTimestamp()
-    });
+await addDoc(collection(db, "requests"), {
+fromUid: user.uid,
+toUid: person.uid,
+fromName: profile.name,
+toName: person.name,
+status: "pending",
+createdAt: serverTimestamp()
+});
 
-    alert("Meet request sent.");
-  } catch (e) {
-    alert("Request failed: " + e.message);
-  }
+alert("Meet request sent.");
+
+} catch (e) {
+alert("Request failed: " + e.message);
+}
 }
 
 async function loadRequests() {
-  const box = $("requestList");
-  box.replaceChildren();
+const box = $("requestList");
+box.replaceChildren();
 
-  try {
-    const snap = await getDocs(query(
-      collection(db, "requests"),
-      where("toUid", "==", user.uid)
-    ));
+try {
+const snap = await getDocs(query(
+collection(db, "requests"),
+where("toUid", "==", user.uid)
+));
 
-    if (snap.empty) {
-      box.textContent = "No meet requests yet.";
-      return;
-    }
+if (snap.empty) {
+box.textContent = "No meet requests yet.";
+return;
+}
 
-    snap.forEach(d => {
-      const data = d.data();
-      const row = document.createElement("p");
-      row.textContent =
-        (data.fromName || "User") + " — " + (data.status || "pending");
-      box.appendChild(row);
-    });
-  } catch (e) {
-    box.textContent = "Could not load requests: " + e.message;
-  }
+snap.forEach(d => {
+const data = d.data();
+const row = document.createElement("p");
+row.textContent =
+(data.fromName || "User") + " — " + (data.status || "pending");
+box.appendChild(row);
+});
+
+} catch (e) {
+box.textContent = "Could not load requests: " + e.message;
+}
 }
 
 $("refreshRequests").addEventListener("click", loadRequests);
 
 $("logout").addEventListener("click", async () => {
-  if (confirm("Are you sure you want to log out?")) {
-    try {
-      await signOut(auth);
-    } catch (e) {
-      alert("Logout failed: " + e.message);
-    }
-  }
+if (confirm("Are you sure you want to log out?")) {
+try {
+await signOut(auth);
+} catch (e) {
+alert("Logout failed: " + e.message);
+}
+}
 });
 
 onAuthStateChanged(auth, async authenticatedUser => {
-  user = authenticatedUser;
+user = authenticatedUser;
 
-  if (!user) {
-    profile = null;
-    confirmation = null;
-    showOnly("login");
-    return;
-  }
+if (!user) {
+profile = null;
+confirmation = null;
+showOnly("login");
+return;
+}
 
-  try {
-    await loadProfile();
-  } catch (e) {
-    showOnly("login");
-    message("loginMsg", "Could not load profile: " + e.message);
-  }
+message("loginMsg", "Login successful. Loading your profile...");
+
+try {
+await loadProfile();
+message("loginMsg", "");
+} catch (e) {
+showOnly("setup");
+message(
+"profileMsg",
+"Could not load profile: " + e.message +
+". Check Firestore Rules in Firebase Console."
+);
+}
 });
 
 $("send").addEventListener("click", async () => {
-  const phone = $("phone").value.trim();
+const phone = $("phone").value.trim();
 
-  if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
-    message("loginMsg", "Enter a valid number with country code, e.g. +91...");
-    return;
-  }
+if (!/^\+[1-9]\d{7,14}$/.test(phone)) {
+message(
+"loginMsg",
+"Enter a valid number with country code, e.g. +91XXXXXXXXXX"
+);
+return;
+}
 
-  try {
-    $("send").disabled = true;
-    message("loginMsg", "Sending OTP...");
+try {
+$("send").disabled = true;
+message("loginMsg", "Sending OTP...");
 
-    if (!verifier) {
-      verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "normal"
-      });
-      await verifier.render();
-    }
+if (verifier) {
+verifier.clear();
+verifier = null;
+}
 
-    confirmation = await signInWithPhoneNumber(auth, phone, verifier);
-    message("loginMsg", "OTP sent. Check your phone.");
-  } catch (e) {
-    message("loginMsg", "OTP error: " + e.message);
-    if (verifier) {
-      verifier.clear();
-      verifier = null;
-    }
-  } finally {
-    $("send").disabled = false;
-  }
+verifier = new RecaptchaVerifier(
+auth,
+"recaptcha-container",
+{size: "normal"}
+);
+
+await verifier.render();
+
+confirmation = await signInWithPhoneNumber(
+auth,
+phone,
+verifier
+);
+
+message("loginMsg", "OTP sent. Check your phone.");
+
+} catch (e) {
+message("loginMsg", "OTP error: " + e.message);
+
+if (verifier) {
+verifier.clear();
+verifier = null;
+}
+} finally {
+$("send").disabled = false;
+}
 });
 
 $("verify").addEventListener("click", async () => {
-  const code = $("otp").value.trim();
+const code = $("otp").value.trim();
 
-  if (!confirmation) {
-    message("loginMsg", "Tap Send OTP first.");
-    return;
-  }
+if (!confirmation) {
+message("loginMsg", "Tap Send OTP first.");
+return;
+}
 
-  if (!/^\d{6}$/.test(code)) {
-    message("loginMsg", "Enter the 6-digit OTP.");
-    return;
-  }
+if (!/^\d{6}$/.test(code)) {
+message("loginMsg", "Enter the 6-digit OTP.");
+return;
+}
 
-  try {
-    await confirmation.confirm(code);
-    message("loginMsg", "Login successful.");
-  } catch (e) {
-    message("loginMsg", "Verification failed: " + e.message);
-  }
+try {
+await confirmation.confirm(code);
+message("loginMsg", "Login successful. Loading profile...");
+} catch (e) {
+message("loginMsg", "Verification failed: " + e.message);
+}
 });
 </script>
 </body>
-</html>
+  </html>
