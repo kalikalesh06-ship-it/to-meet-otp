@@ -2,119 +2,191 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TO MEET</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #eaf2ff;
-      padding: 20px;
-      text-align: center;
-    }
-    .card {
-      max-width: 360px;
-      margin: 40px auto;
-      padding: 24px;
-      background: white;
-      border-radius: 16px;
-    }
-    input, button {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 13px;
-      margin: 8px 0;
-      font-size: 16px;
-    }
-    button {
-      background: #1769e0;
-      color: white;
-      border: 0;
-      border-radius: 8px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TO MEET</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef4ff;color:#17233b}
+header{background:#1769e0;color:white;padding:18px;text-align:center}
+.card{background:white;padding:18px;border-radius:16px;margin:14px auto;max-width:480px;box-shadow:0 3px 12px #0000000d}
+input,button,textarea{width:100%;padding:12px;margin:7px 0;font-size:16px;border:1px solid #ccd6e5;border-radius:9px}
+button{background:#1769e0;color:white;border:0;cursor:pointer}
+button.secondary{background:#e5edff;color:#174da5}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px;background:white}
+nav button{font-size:14px;padding:11px 4px;margin:0}
+h2{margin-top:5px}
+small,.muted{color:#63718a}
+.page{max-width:500px;margin:auto}
+[hidden]{display:none!important}
+</style>
 </head>
 <body>
-  <div class="card" id="login">
-    <h2>TO MEET</h2>
-    <p>Login with your phone number</p>
-    <input id="phone" type="tel" placeholder="+91XXXXXXXXXX">
-    <div id="recaptcha-container"></div>
-    <button id="send">Send OTP</button>
-    <input id="otp" inputmode="numeric" placeholder="Enter OTP">
-    <button id="verify">Verify OTP</button>
-    <p id="message"></p>
-  </div>
+<header>
+  <h1>🤝 TO MEET</h1>
+  <p>Meet • Connect • Chat</p>
+</header>
 
-  <div class="card" id="home" hidden>
-    <h2>Welcome to TO MEET!</h2>
-    <p>Login successful.</p>
-    <p>Your Home Page is ready.</p>
-  </div>
+<section id="login" class="card">
+  <h2>Welcome!</h2>
+  <p>Login with your phone number</p>
+  <input id="phone" type="tel" placeholder="+91XXXXXXXXXX">
+  <div id="recaptcha-container"></div>
+  <button id="send">Send OTP</button>
+  <input id="otp" inputmode="numeric" placeholder="Enter OTP">
+  <button id="verify">Verify OTP</button>
+  <p id="message" role="status"></p>
+</section>
 
-  <script type="module">
-    import { initializeApp } from
-      "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import {
-      getAuth, RecaptchaVerifier, signInWithPhoneNumber
-    } from
-      "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<section id="app" hidden>
+  <nav>
+    <button onclick="showPage('discover')">Discover</button>
+    <button onclick="showPage('requests')">Requests</button>
+    <button onclick="showPage('chat')">Chat</button>
+    <button onclick="showPage('profile')">Profile</button>
+    <button onclick="showPage('coins')">Coins</button>
+    <button onclick="logout()">Logout</button>
+  </nav>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
-      authDomain: "to-meet-e11eb.firebaseapp.com",
-      projectId: "to-meet-e11eb",
-      storageBucket: "to-meet-e11eb.firebasestorage.app",
-      messagingSenderId: "103784656631",
-      appId: "1:103784656631:web:15670401770f8ac5536df2"
-    };
+  <main class="page">
+    <section id="discover" class="card">
+      <h2>Discover people</h2>
+      <p>Find people and make new connections.</p>
+      <p class="muted">People profiles will appear here when the database is connected.</p>
+      <button onclick="showPage('requests')">My Meet Requests</button>
+    </section>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const message = document.getElementById("message");
-    let confirmation = null;
-    let verifier;
+    <section id="requests" class="card" hidden>
+      <h2>Meet Requests</h2>
+      <p>No requests yet.</p>
+      <p class="muted">Real requests require Firebase database setup.</p>
+    </section>
 
-    try {
-      verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-        size: "normal"
-      });
-      await verifier.render();
-    } catch (e) {
-      message.textContent = "reCAPTCHA error: " + e.message;
-    }
+    <section id="chat" class="card" hidden>
+      <h2>Chat</h2>
+      <p>No conversations yet.</p>
+      <p class="muted">Chat is not connected yet.</p>
+      <p>Planned rate: 5 Coins per minute.</p>
+      <p>Coins must be checked securely on the server before charging.</p>
+    </section>
 
-    document.getElementById("send").onclick = async () => {
-      const phone = document.getElementById("phone").value.trim();
-      if (!phone.startsWith("+")) {
-        message.textContent = "Enter country code, e.g. +91...";
-        return;
-      }
-      try {
-        message.textContent = "Sending OTP...";
-        confirmation = await signInWithPhoneNumber(auth, phone, verifier);
-        message.textContent = "OTP sent. Check your phone.";
-      } catch (e) {
-        message.textContent = "OTP error: " + e.code + " - " + e.message;
-      }
-    };
+    <section id="profile" class="card" hidden>
+      <h2>My Profile</h2>
+      <label for="displayName">Your name</label>
+      <input id="displayName" placeholder="Enter your name">
+      <label for="about">About me</label>
+      <textarea id="about" placeholder="Write something about yourself"></textarea>
+      <button onclick="saveProfile()">Save profile on this page</button>
+      <p id="profileMessage" class="muted"></p>
+      <p class="muted">This demo does not save your profile to the database.</p>
+    </section>
 
-    document.getElementById("verify").onclick = async () => {
-      if (!confirmation) {
-        message.textContent = "Tap Send OTP first.";
-        return;
-      }
-      try {
-        await confirmation.confirm(
-          document.getElementById("otp").value.trim()
-        );
-        document.getElementById("login").hidden = true;
-        document.getElementById("home").hidden = false;
-      } catch (e) {
-        message.textContent = "Verification error: " + e.code + " - " + e.message;
-      }
-    };
-  </script>
+    <section id="coins" class="card" hidden>
+      <h2>🪙 My Coins</h2>
+      <p>Balance: <strong>Demo only</strong></p>
+      <p class="muted">Real balance and payments are not connected yet.</p>
+      <p>Payment verification must happen securely before coins are credited.</p>
+    </section>
+  </main>
+</section>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, RecaptchaVerifier, signInWithPhoneNumber, signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
+  authDomain: "to-meet-e11eb.firebaseapp.com",
+  projectId: "to-meet-e11eb",
+  storageBucket: "to-meet-e11eb.firebasestorage.app",
+  messagingSenderId: "103784656631",
+  appId: "1:103784656631:web:15670401770f8ac5536df2"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const message = document.getElementById("message");
+let confirmation = null;
+let verifier = null;
+
+window.showPage = function(id) {
+  ["discover","requests","chat","profile","coins"].forEach(page => {
+    document.getElementById(page).hidden = page !== id;
+  });
+};
+
+window.saveProfile = function() {
+  document.getElementById("profileMessage").textContent =
+    "Details shown on this page only. Database saving is not connected yet.";
+};
+
+window.logout = async function() {
+  try {
+    await signOut(auth);
+    confirmation = null;
+    document.getElementById("app").hidden = true;
+    document.getElementById("login").hidden = false;
+    message.textContent = "You have logged out.";
+  } catch (e) {
+    message.textContent = "Logout error: " + e.message;
+  }
+};
+
+onAuthStateChanged(auth, user => {
+  document.getElementById("login").hidden = !!user;
+  document.getElementById("app").hidden = !user;
+  if (user) showPage("discover");
+});
+
+try {
+  verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+    size: "normal"
+  });
+  await verifier.render();
+} catch (e) {
+  message.textContent = "reCAPTCHA error: " + e.message;
+}
+
+document.getElementById("send").onclick = async () => {
+  const phone = document.getElementById("phone").value.trim();
+  if (!phone.startsWith("+")) {
+    message.textContent = "Enter country code, e.g. +91...";
+    return;
+  }
+  if (!verifier) {
+    message.textContent = "reCAPTCHA is not ready. Refresh and try later.";
+    return;
+  }
+  try {
+    message.textContent = "Sending OTP...";
+    confirmation = await signInWithPhoneNumber(auth, phone, verifier);
+    message.textContent = "OTP sent. Check your phone.";
+  } catch (e) {
+    message.textContent = "OTP error: " + e.code + " - " + e.message;
+  }
+};
+
+document.getElementById("verify").onclick = async () => {
+  if (!confirmation) {
+    message.textContent = "Tap Send OTP first.";
+    return;
+  }
+  try {
+    await confirmation.confirm(
+      document.getElementById("otp").value.trim()
+    );
+    message.textContent = "Login successful!";
+  } catch (e) {
+    message.textContent =
+      "Verification error: " + e.code + " - " + e.message;
+  }
+};
+</script>
 </body>
 </html>
+
 
