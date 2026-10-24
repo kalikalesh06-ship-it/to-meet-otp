@@ -508,47 +508,7 @@ $("search").addEventListener("input",renderPeople);
 
 <script type="module">
   import { initializeApp, getApp }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, doc, setDoc }
-    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-  // Use the same Firebase project configuration as your OTP page.
-  const app = getApp();
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  window.saveProfile = async function () {
-    const user = auth.currentUser;
-    const name = document.getElementById("profileName").value.trim();
-    const about = document.getElementById("profileAbout").value.trim();
-    const message = document.getElementById("profileMessage");
-
-    if (!user) {
-      message.textContent = "ముందుగా Phone OTPతో Login అవ్వండి.";
-      return;
-    }
-
-    if (!name) {
-      message.textContent = "దయచేసి మీ పేరు నమోదు చేయండి.";
-      return;
-    }
-
-    try {
-      await setDoc(doc(db, "users", user.uid), {
-        name: name,
-        about: about,
-        updatedAt: new Date().toISOString()
-      }, { merge: true });
-
-      message.textContent = "Profile విజయవంతంగా Save అయింది!";
-    } catch (error) {
-      console.error(error);
-      message.textContent = "Save కాలేదు. Firebase Firestore Rules చెక్ చేయండి.";
-    }
-  };
-</script>
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app
 </body>
 </html>
 
