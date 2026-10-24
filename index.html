@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TO MEET - Phone Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eaf2ff;
+      padding: 24px;
+      text-align: center;
+    }
+    .card {
+      max-width: 360px;
+      margin: 40px auto;
+      padding: 24px;
+      background: white;
+      border-radius: 16px;
+    }
+    input, button {
+      width: 100%;
+      padding: 13px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    button {
+      background: #1769e0;
+      color: white;
+      border: 0;
+      border-radius: 8px;
+    }
+    #recaptcha-container { margin: 16px 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>TO MEET</h2>
+    <p>Login with your phone number</p>
+    <input id="phone" type="tel" placeholder="+91XXXXXXXXXX">
+    <div id="recaptcha-container"></div>
+    <button id="send" type="button">Send OTP</button>
+    <input id="otp" type="text" inputmode="numeric" placeholder="Enter OTP">
+    <button id="verify" type="button">Verify OTP</button>
+    <p id="message"></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, RecaptchaVerifier, signInWithPhoneNumber
+    } from
+      "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyABoKiDmy2kx_rdiDkbjqBARgU5cmphvGg",
+      authDomain: "to-meet-e11eb.firebaseapp.com",
+      projectId: "to-meet-e11eb",
+      storageBucket: "to-meet-e11eb.firebasestorage.app",
+      messagingSenderId: "103784656631",
+      appId: "1:103784656631:web:15670401770f8ac5536df2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const message = document.getElementById("message");
+    let confirmation = null;
+    let verifier = null;
+
+    try {
+      verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "normal"
+      });
+      await verifier.render();
+    } catch (e) {
+      message.textContent = "reCAPTCHA setup failed: " + e.message;
+    }
+
+    document.getElementById("send").onclick = async () => {
+      const phone = document.getElementById("phone").value.trim();
+      if (!phone.startsWith("+")) {
+        message.textContent = "Include country code, e.g. +91XXXXXXXXXX";
+        return;
+      }
+      try {
+        message.textContent = "Sending OTP...";
+        confirmation = await signInWithPhoneNumber(auth, phone, verifier);
+        message.textContent = "OTP sent. Check your phone.";
+      } catch (e) {
+        message.textContent = "Could not send OTP: " + e.message;
+      }
+    };
+
+    document.getElementById("verify").onclick = async () => {
+      if (!confirmation) {
+        message.textContent = "Tap Send OTP first.";
+        return;
+      }
+      try {
+        await confirmation.confirm(
+          document.getElementById("otp").value.trim()
+        );
+        message.textContent = "Phone verified! Login successful.";
+      } catch (e) {
+        message.textContent = "Verification failed. Check OTP and try again.";
+      }
+    };
+  </script>
+</body>
+  </html>
